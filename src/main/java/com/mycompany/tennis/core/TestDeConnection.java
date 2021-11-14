@@ -1,10 +1,10 @@
 package com.mycompany.tennis.core;
 
 
-import com.mycompany.tennis.core.entity.Joueur;
-import com.mycompany.tennis.core.entity.Tournoi;
+import com.mycompany.tennis.core.entity.*;
 import com.mycompany.tennis.core.repository.TournoiRepositoryImpl;
 import com.mycompany.tennis.core.service.JoueurService;
+import com.mycompany.tennis.core.service.MatchService;
 import com.mycompany.tennis.core.service.TournoiService;
 
 import java.util.List;
@@ -14,18 +14,30 @@ public class TestDeConnection {
     public static void main(String... args){
 
 
-        JoueurService joueurService=new JoueurService();
+        Joueur federer=new Joueur(){{
+            setId(32l);
+        }};
+        Joueur morray=new Joueur(){{
+            setId(34l);
+        }};
+        Epreuve epreuve=new Epreuve(){{
+            setId(15l);
+        }};
+        Score score =new Score(){{
+            setSet1((byte)3);
+            setSet2((byte)5);
+            setSet2((byte)6);
+        }};
+        Match match=new Match(){{
+            setEpreuve(epreuve);
+            setFinaliste(morray);
+            setVainqueur(federer);
+            setScore(score);
+        }};
 
-        TournoiService tournoiService=new TournoiService();
+      Match match1=( new MatchService()).createMatch(match);
 
-        List<Joueur> joueurList=joueurService.list();
-        Tournoi tournoi= tournoiService.getById(4l);
-
-        System.out.println(tournoi.getNom()+" "+tournoi.getCode());
-        System.out.println("\n______________________\n");
-        for(Joueur joueur: joueurList){
-            System.out.println(joueur.getNom()+" "+joueur.getPrenom());
-        }
+        System.out.println("match créé avec l'id "+match1.getId());
 
     }
 }

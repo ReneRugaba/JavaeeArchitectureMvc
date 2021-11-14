@@ -10,24 +10,43 @@ public class ScoreRepositoryImpl {
 
     public Score create(Score score){
         Connection conn=null;
+        Score nwScore=null;
         try {
             DataSource data= DataSourceProvider.getDatesourceProvider();
             conn=data.getConnection();
-            PreparedStatement stm= conn.prepareStatement("INSERT INTO SCORE_VAINQUEUR (ID_MATCH,SET1,SET2,SET3,SET4,SET5) VALUES(?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement stm= conn.prepareStatement("INSERT INTO SCORE_VAINQUEUR (ID_MATCH,SET_1,SET_2,SET_3,SET_4,SET_5) VALUES(?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
             stm.setLong(1,score.getMatch().getId());
             stm.setByte(2,score.getSet1());
             stm.setByte(3,score.getSet2());
-            stm.setByte(4,score.getSet3());
-            stm.setByte(5,score.getSet4());
-            stm.setByte(6,score.getSet5());
+
+            if (score.getSet3() != null) {
+                stm.setByte(4, score.getSet3());
+            } else {
+                stm.setNull(4, Types.TINYINT);
+            }
+
+            if (score.getSet3() != null) {
+                stm.setByte(5,score.getSet4());
+            } else {
+                stm.setNull(5, Types.TINYINT);
+            }
+
+            if (score.getSet3() != null) {
+                stm.setByte(6,score.getSet5());
+            } else {
+                stm.setNull(6, Types.TINYINT);
+            }
+
+
+
 
             stm.executeUpdate();
 
             ResultSet rs= stm.getGeneratedKeys();
 
             if (rs.next()){
-                return new Score(){{
-                    setId(rs.getLong("ID"));
+                nwScore=new Score(){{
+                    setId(rs.getLong(1));
                 }};
             }
 
@@ -44,6 +63,6 @@ public class ScoreRepositoryImpl {
                 }
             }
         }
-        return null;
+        return nwScore;
     }
 }

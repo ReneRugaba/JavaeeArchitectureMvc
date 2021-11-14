@@ -17,10 +17,11 @@ public class MatchRepositoryImpl {
             stm.setLong(1,match.getEpreuve().getId());
             stm.setLong(2,match.getVainqueur().getId());
             stm.setLong(3,match.getFinaliste().getId());
-            ResultSet rs=stm.executeQuery();
+            stm.executeUpdate();
+            ResultSet rs=stm.getGeneratedKeys();
             if(rs.next()){
                 return new Match(){{
-                    setId(rs.getLong("ID"));
+                    setId(rs.getLong(1));
                 }};
             }
         }catch (SQLException e){
